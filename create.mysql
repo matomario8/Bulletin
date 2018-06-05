@@ -1,0 +1,44 @@
+DROP TABLE IF EXISTS SendTos, Messages, Users;
+
+CREATE TABLE Users
+(
+u_userid INTEGER UNSIGNED AUTO_INCREMENT,
+u_username VARCHAR(60),
+u_passhash CHAR(40),
+u_newpass CHAR(40),
+u_email VARCHAR(255),
+u_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+u_lastlogin TIMESTAMP NULL,
+u_validate CHAR(20),
+u_salt CHAR(20),
+u_newsalt CHAR(20),
+PRIMARY KEY(u_userid),
+UNIQUE KEY(u_username),
+UNIQUE KEY(u_email)
+);
+
+CREATE TABLE Messages
+(
+m_msgid INTEGER UNSIGNED AUTO_INCREMENT,
+m_fromid INTEGER UNSIGNED,
+m_sent TIMESTAMP NOT NULL,
+m_subject VARCHAR(80),
+m_text TEXT NOT NULL,
+PRIMARY KEY (m_msgid),
+FOREIGN KEY (m_fromid) REFERENCES Users(u_userid)
+);
+
+CREATE TABLE SendTos
+(
+s_sendid INTEGER UNSIGNED AUTO_INCREMENT,
+s_msgid INTEGER UNSIGNED,
+s_toid INTEGER UNSIGNED,
+s_readit TIMESTAMP NULL,
+PRIMARY KEY (s_sendid),
+FOREIGN KEY (s_msgid) REFERENCES  Messages(m_msgid),
+FOREIGN KEY (s_toid) REFERENCES Users(u_userid)
+);
+
+SELECT * FROM Users;
+SELECT * FROM Messages;
+SELECT * FROM SendTos;
